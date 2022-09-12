@@ -1,3 +1,5 @@
+import requests
+
 class RestUtils:
     def __init__(self):
         self.url = "https://gorest.co.in/public/v2/"
