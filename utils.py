@@ -19,8 +19,12 @@ class RestUtils:
         response = requests.post(self.url + page, json=json_data, headers=self.headers, verify=False)
         return response
 
+    def update_object(self, page, json_data, id):
+        response = requests.put(self.url + page + "/" + str(id), json=json_data, headers=self.headers, verify=False)
+        return response
+
     def delete_object(self, page, id):
-        response = requests.delete(self.url + page + "/" + id, headers=self.headers, verify=False)
+        response = requests.delete(self.url + page + "/" + str(id), headers=self.headers, verify=False)
         return response
 
     def check_created_object(self, page, json_data):
@@ -39,19 +43,13 @@ class Users(RestUtils):
         self.json_data = json.load(open('user.json', 'r'))
         super().__init__()
 
-    def fetch_users(self):
-        return self.fetch_information(self.page)
-
     def create_user(self):
         self.create_object(self.page, self.json_data)
         return self.check_created_object(self.page, self.json_data)
 
-    def delete_user(self, id):
-        try:
-            self.delete_object(self.page, str(id))
-        except:
-            return False
-        return True
+    def update_user(self, id):
+        self.json_data["email"] = "john.doe2@mail.com"
+        return self.update_object(self.page, self.json_data, id)
 
 
 class Posts(RestUtils):
@@ -61,20 +59,15 @@ class Posts(RestUtils):
         self.json_data = json.load(open('post.json', 'r'))
         super().__init__()
 
-    def fetch_posts(self):
-        return self.fetch_information(self.page)
 
     def create_post(self, id):
         self.json_data["user_id"] = id
         self.create_object(self.page, self.json_data)
         return self.check_created_object(self.page, self.json_data)
 
-    def delete_post(self, id):
-        try:
-            self.delete_object(self.page, str(id))
-        except:
-            return False
-        return True
+    def update_post(self, id):
+        self.json_data["title"] = "New title"
+        return self.update_object(self.page, self.json_data, id)
 
 
 class Comments(RestUtils):
@@ -84,20 +77,14 @@ class Comments(RestUtils):
         self.json_data = json.load(open('comment.json', 'r'))
         super().__init__()
 
-    def fetch_comments(self):
-        return self.fetch_information(self.page)
-
     def create_comment(self, id):
         self.json_data["post_id"] = id
         self.create_object(self.page, self.json_data)
         return self.check_created_object(self.page, self.json_data)
 
-    def delete_comment(self, id):
-        try:
-            self.delete_object(self.page, str(id))
-        except:
-            return False
-        return True
+    def update_comment(self, id):
+        self.json_data["email"] = "john.doe2@mail.com"
+        return self.update_object(self.page, self.json_data, id)
 
 
 class Todos(RestUtils):
@@ -107,17 +94,11 @@ class Todos(RestUtils):
         self.json_data = json.load(open('todo.json', 'r'))
         super().__init__()
 
-    def fetch_todos(self):
-        return self.fetch_information(self.page)
-
     def create_todo(self, id):
         self.json_data["user_id"] = id
         self.create_object(self.page, self.json_data)
         return self.check_created_object(self.page, self.json_data)
 
-    def delete_todo(self, id):
-        try:
-            self.delete_object(self.page, str(id))
-        except:
-            return False
-        return True
+    def update_todo(self, id):
+        self.json_data["title"] = "New title"
+        return self.update_object(self.page, self.json_data, id)
