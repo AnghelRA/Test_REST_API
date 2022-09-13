@@ -61,7 +61,7 @@ class TestCreateComment(aetest.Testcase):
 
         self.parent.parameters['comment_id'] = result
 
-class TodoCreateComment(aetest.Testcase):
+class TestCreateTodo(aetest.Testcase):
 
     must_pass = True
 
