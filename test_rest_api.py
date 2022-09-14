@@ -31,7 +31,7 @@ class TestUser(aetest.Testcase):
     def test_create_user(self, users):
         result = users.create_user()
         if not result:
-            self.failed(result)
+            self.failed()
 
         self.parent.parameters['user_id'] = result
 
@@ -39,25 +39,27 @@ class TestUser(aetest.Testcase):
     def test_update_user(self, users, user_id):
         result = users.update_user(user_id)
         if result.status_code != 200:
-            self.failed(result)
+            print(result.status_code, result.content)
+            self.failed()
 
     @aetest.test
     def test_fail_update_user(self, users, user_id):
         result = users.fail_update_user(user_id)
         if result.status_code != 200:
-            self.failed(result)
+            print(result.status_code, result.content)
+            self.failed()
 
 
 class TestPost(aetest.Testcase):
 
-    must_pass = True
+    # must_pass = True
 
     @aetest.test
     def test_create_post(self, posts, user_id):
         result = posts.create_post(user_id)
 
         if not result:
-            self.failed(result)
+            self.failed()
 
         self.parent.parameters['post_id'] = result
 
@@ -65,32 +67,41 @@ class TestPost(aetest.Testcase):
     def test_update_post(self, posts, post_id):
         result = posts.update_post(post_id)
         if result.status_code != 200:
-            self.failed(result)
+            print(result.status_code, result.content)
+            self.failed()
+
+    @aetest.test
+    def test_fail_create_post(self, posts):
+        user_id = "banana"
+        result = posts.create_post(user_id)
+        if not result:
+            self.failed("Post was not created")
 
 
 class TestComment(aetest.Testcase):
 
-    must_pass = True
+    # must_pass = True
 
     @aetest.test
     def test_create_comment(self, comments, post_id):
         result = comments.create_comment(post_id)
 
         if not result:
-            self.failed(result)
+            self.failed()
 
         self.parent.parameters['comment_id'] = result
 
     @aetest.test
-    def test_update_user(self, comments, comment_id):
+    def test_update_comment(self, comments, comment_id):
         result = comments.update_comment(comment_id)
         if result.status_code != 200:
-            self.failed(result)
+            print(result.status_code, result.content)
+            self.failed()
 
 
 class TestTodo(aetest.Testcase):
 
-    must_pass = True
+    # must_pass = True
 
     @aetest.test
     def test_create_todo(self, todos, user_id):
@@ -105,7 +116,8 @@ class TestTodo(aetest.Testcase):
     def test_update_todo(self, todos, todo_id):
         result = todos.update_todo(todo_id)
         if result.status_code != 200:
-            self.failed(result)
+            print(result.status_code, result.content)
+            self.failed()
 
 
 class ScriptCommonCleanup(aetest.CommonCleanup):
@@ -114,25 +126,28 @@ class ScriptCommonCleanup(aetest.CommonCleanup):
     def delete_todos(self, todos, todo_id):
         result = todos.delete_object("todos", todo_id)
         if result.status_code != 204:
-            self.failed(result)
+            self.failed(result.status_code, result.content)
 
     @aetest.subsection
     def delete_comments(self, comments, comment_id):
         result = comments.delete_object("comments", comment_id)
         if result.status_code != 204:
-            self.failed(result)
+            print(result.status_code, result.content)
+            self.failed()
 
     @aetest.subsection
     def delete_posts(self, posts, post_id):
         result = posts.delete_object("posts", post_id)
         if result.status_code != 204:
-            self.failed(result)
+            print(result.status_code, result.content)
+            self.failed()
 
     @aetest.subsection
     def delete_users(self, users, user_id):
         result = users.delete_object("users", user_id)
         if result.status_code != 204:
-            self.failed(result)
+            print(result.status_code, result.content)
+            self.failed()
 
 
 if __name__ == '__main__':
