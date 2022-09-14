@@ -48,7 +48,11 @@ class Users(RestUtils):
         return self.check_created_object(self.page, self.json_data)
 
     def update_user(self, id):
-        self.json_data["email"] = "john.doe2@mail.com"
+        self.json_data["email"] = "john.doe@hotmail.com"
+        return self.update_object(self.page, self.json_data, id)
+
+    def fail_update_user(self, id):
+        self.json_data["gender"] = "helicopter"
         return self.update_object(self.page, self.json_data, id)
 
 
@@ -102,3 +106,4 @@ class Todos(RestUtils):
     def update_todo(self, id):
         self.json_data["title"] = "New title"
         return self.update_object(self.page, self.json_data, id)
+    
