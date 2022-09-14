@@ -25,20 +25,27 @@ class ScriptCommonSetup(aetest.CommonSetup):
 
 class TestUser(aetest.Testcase):
 
-    must_pass = True
+    # must_pass = True
 
     @aetest.test
     def test_create_user(self, users):
         result = users.create_user()
         if not result:
-            self.failed()
+            self.failed(result)
 
         self.parent.parameters['user_id'] = result
 
+    @aetest.test
     def test_update_user(self, users, user_id):
         result = users.update_user(user_id)
         if result.status_code != 200:
-            self.failed()
+            self.failed(result)
+
+    @aetest.test
+    def test_fail_update_user(self, users, user_id):
+        result = users.fail_update_user(user_id)
+        if result.status_code != 200:
+            self.failed(result)
 
 
 class TestPost(aetest.Testcase):
@@ -50,14 +57,16 @@ class TestPost(aetest.Testcase):
         result = posts.create_post(user_id)
 
         if not result:
-            self.failed()
+            self.failed(result)
 
         self.parent.parameters['post_id'] = result
 
+    @aetest.test
     def test_update_post(self, posts, post_id):
         result = posts.update_post(post_id)
         if result.status_code != 200:
-            self.failed()
+            self.failed(result)
+
 
 class TestComment(aetest.Testcase):
 
@@ -68,14 +77,16 @@ class TestComment(aetest.Testcase):
         result = comments.create_comment(post_id)
 
         if not result:
-            self.failed()
+            self.failed(result)
 
         self.parent.parameters['comment_id'] = result
 
+    @aetest.test
     def test_update_user(self, comments, comment_id):
         result = comments.update_comment(comment_id)
         if result.status_code != 200:
-            self.failed()
+            self.failed(result)
+
 
 class TestTodo(aetest.Testcase):
 
@@ -86,14 +97,15 @@ class TestTodo(aetest.Testcase):
         result = todos.create_todo(user_id)
 
         if not result:
-            self.failed()
+            self.failed(result)
 
         self.parent.parameters['todo_id'] = result
 
+    @aetest.test
     def test_update_todo(self, todos, todo_id):
         result = todos.update_todo(todo_id)
         if result.status_code != 200:
-            self.failed()
+            self.failed(result)
 
 
 class ScriptCommonCleanup(aetest.CommonCleanup):
@@ -121,6 +133,7 @@ class ScriptCommonCleanup(aetest.CommonCleanup):
         result = users.delete_object("users", user_id)
         if result.status_code != 204:
             self.failed(result)
+
 
 if __name__ == '__main__':
     aetest.main()
