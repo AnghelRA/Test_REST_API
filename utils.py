@@ -51,6 +51,11 @@ class Users(RestUtils):
         self.json_data["email"] = "john.doe@hotmail.com"
         return self.update_object(self.page, self.json_data, id)
 
+    def fail_create_user(self):
+        self.json_data["gender"] = "helicopter"
+        self.create_object(self.page, self.json_data)
+        return self.check_created_object(self.page, self.json_data)
+
     def fail_update_user(self, id):
         self.json_data["gender"] = "helicopter"
         return self.update_object(self.page, self.json_data, id)
@@ -62,7 +67,6 @@ class Posts(RestUtils):
         self.page = "posts"
         self.json_data = json.load(open('post.json', 'r'))
         super().__init__()
-
 
     def create_post(self, id):
         self.json_data["user_id"] = id
@@ -106,4 +110,3 @@ class Todos(RestUtils):
     def update_todo(self, id):
         self.json_data["title"] = "New title"
         return self.update_object(self.page, self.json_data, id)
-    
