@@ -25,7 +25,7 @@ class ScriptCommonSetup(aetest.CommonSetup):
 
 class TestUser(aetest.Testcase):
 
-    # must_pass = True
+    must_pass = True
 
     @aetest.test
     def test_create_user(self, users):
@@ -43,16 +43,28 @@ class TestUser(aetest.Testcase):
             self.failed()
 
     @aetest.test
+    def test_fail_create_user(self, users):
+        result = users.fail_create_user()
+        if result:
+            self.failed()
+
+    @aetest.test
     def test_fail_update_user(self, users, user_id):
         result = users.fail_update_user(user_id)
-        if result.status_code != 200:
-            print(result.status_code, result.content)
+        if result.status_code == 200:
+            self.failed()
+
+    @aetest.test
+    def test_fail_delete_users(self, users):
+        user_id = "gorila"
+        result = users.delete_object("users", user_id)
+        if result.status_code == 204:
             self.failed()
 
 
 class TestPost(aetest.Testcase):
 
-    # must_pass = True
+    must_pass = True
 
     @aetest.test
     def test_create_post(self, posts, user_id):
@@ -74,13 +86,27 @@ class TestPost(aetest.Testcase):
     def test_fail_create_post(self, posts):
         user_id = "banana"
         result = posts.create_post(user_id)
-        if not result:
-            self.failed("Post was not created")
+        if result:
+            self.failed()
+
+    @aetest.test
+    def test_fail_update_post(self, posts):
+        post_id = "monkey"
+        result = posts.update_post(post_id)
+        if result.status_code == 200:
+            self.failed()
+
+    @aetest.test
+    def test_fail_delete_posts(self, posts):
+        post_id = "minion"
+        result = posts.delete_object("post", post_id)
+        if result.status_code == 204:
+            self.failed()
 
 
 class TestComment(aetest.Testcase):
 
-    # must_pass = True
+    must_pass = True
 
     @aetest.test
     def test_create_comment(self, comments, post_id):
@@ -101,7 +127,7 @@ class TestComment(aetest.Testcase):
 
 class TestTodo(aetest.Testcase):
 
-    # must_pass = True
+    must_pass = True
 
     @aetest.test
     def test_create_todo(self, todos, user_id):
